@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "hku.hk.cs.a3330gp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "hku.hk.cs.a3330gp"
