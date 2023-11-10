@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">3330GP</string>
+    <string name="app_name">CareTaker</string>
+    <string name="tvStatus_text_idle">Demo: Pin a location</string>
+    <string name="tvStatus_text_out_of_range">Get within 100m of William\'s Residence</string>
+    <string name="tvStatus_text_in_range">Attendance taking available!</string>
+    <string name="btnAttendance_text_out_of_range">Not in range for attendance</string>
+    <string name="btnAttendance_text_in_range">Take Attendance</string>
+    <string name="content_description_one">Home</string>
+    <string name="content_description_two">Navigation</string>
+    <string name="profile">Profile</string>
+    <string name="content_description_profile">Information of caretaker</string>
+    <string name="header_text">user1</string>
+    <string name="header_title">Caretaker</string>
+    <string name="main_subheader_title">Main</string>
+    <string name="attendance_subheader_title">Attendance</string>
+    <string name="nav_home_label">Home</string>
+    <string name="nav_navigation_label">Navigation</string>
+    <string name="nav_ar_label">AR Attendance</string>
+    <string name="nav_history_label">Attendance History</string>
 </resources>

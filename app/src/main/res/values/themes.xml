@@ -1,9 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme._3330GP" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.CareTaker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/salmon</item>
+        <item name="colorAccent">@color/salmon</item>
+        <item name="colorPrimaryDark">@color/orange</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/yellow</item>
+        <item name="colorTertiary">@color/cream</item>
+        <item name="colorError">@color/danger</item>
+        <item name="colorControlNormal">@color/salmon</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="Theme._3330GP" parent="Base.Theme._3330GP" />
+    <style name="Theme.CareTaker" parent="Base.Theme.CareTaker" />
+
+    <style name="Theme.CareTaker.Toolbar" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="logo">@drawable/ic_care</item>
+        <item name="android:gravity">start</item>
+    </style>
 </resources>

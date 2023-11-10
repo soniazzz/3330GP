@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_item"
+        android:title="">
+    <menu>
+        <item
+            android:id="@+id/nav_home"
+            android:title="@string/nav_home_label"
+            android:icon="@drawable/ic_home"
+            android:checkable="true"/>
+    </menu>
+    </item>
+
+    <item
+        android:id="@+id/attendance_item"
+        android:title="@string/attendance_subheader_title">
+        <menu>
+            <item
+                android:id="@+id/nav_navigation"
+                android:title="@string/nav_navigation_label"
+                android:icon="@drawable/ic_navigation"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/nav_ar"
+                android:title="@string/nav_ar_label"
+                android:icon="@drawable/ic_ar"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/nav_history"
+                android:title="@string/nav_history_label"
+                android:icon="@drawable/ic_history"
+                android:checkable="true"/>
+        </menu>
+    </item>
+</menu>
