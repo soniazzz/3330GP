@@ -33,4 +33,9 @@
                 android:checkable="true"/>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/btnTheme"
+        android:title="Theme Switch">
+    </item>
 </menu>

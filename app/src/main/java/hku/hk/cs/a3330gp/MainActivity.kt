@@ -13,34 +13,46 @@ import hku.hk.cs.a3330gp.ar.AttendanceActivity
 import hku.hk.cs.a3330gp.map.NavigationActivity
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
-import org.json.JSONObject
 import android.util.Log
 import com.android.volley.toolbox.JsonArrayRequest
+import hku.hk.cs.a3330gp.data.CareTaking
 import hku.hk.cs.a3330gp.data.Patient
 
 class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     private lateinit var btnAR: Button
     private lateinit var btnMap: Button
+    private lateinit var btnCalendar: Button
     private lateinit var btnTheme: Button
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
-
+    private lateinit var btnCareList: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnAR = findViewById(R.id.btnAR)
-        btnTheme = findViewById(R.id.btnTheme)
+        btnCalendar = findViewById(R.id.calendar)
         btnMap = findViewById(R.id.btnMap)
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.navigationView)
+        btnCareList = findViewById(R.id.jobs)
+
+
 
         btnAR.setOnClickListener { startAr() }
         btnMap.setOnClickListener { startMap() }
-        btnTheme.setOnClickListener { switchTheme() }
+//        btnTheme.setOnClickListener { switchTheme() }
+        btnCareList.setOnClickListener{
+            startShowList()
+//            supportFragmentManager.beginTransaction()
+//            .replace(R.id.constraintlayout1, CareTakingFragment(), "Caretaking").addToBackStack(null)
+//            .commit()
+
+//            startActivity(Intent( ))
+        }
+
         val health =  findViewById<Button>(R.id.health)
         val profile =  findViewById<Button>(R.id.profile)
         profile.setOnClickListener{
@@ -65,6 +77,9 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
                 R.id.nav_navigation -> startMap()
                 R.id.nav_ar -> startAr()
                 R.id.nav_history -> Toast.makeText(this, "You got me!", Toast.LENGTH_SHORT).show()
+                R.id.btnTheme -> switchTheme()
+
+
             }
             true
         }
@@ -72,6 +87,10 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.appBarFragment, TopAppBarFragment(), "AppBar")
             .commit()
+
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.constraintlayout1, HomeFragment(), "Main")
+//            .commit()
     }
 
     override fun onResume() {
@@ -132,6 +151,41 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         }
         val intent = Intent(this, Profile::class.java).apply {
             putParcelableArrayListExtra("data", patientsList)
+        }
+        startActivity(intent)
+    }
+
+    private fun startShowList() {
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.constraintlayout1, HomeFragment(), "Caretaking")
+//            .commit()
+        val url = "http://147.8.121.248:5000/jobs"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                renderJobList(response)
+            },
+            Response.ErrorListener { error ->
+                Log.e("MyCareTakingListActivity", error.toString())
+            }
+        )
+        Volley.newRequestQueue(this).add(jsonArrayRequest)
+    }
+
+    private fun renderJobList(jsonArray: JSONArray) {
+        val careTakingList = arrayListOf<CareTaking>()
+        for (i in 0 until jsonArray.length()){
+            val careTakingObj = jsonArray.getJSONObject(i)
+            val id = careTakingObj.getString("id")
+            val jobTitle = careTakingObj.getString("jobTitle")
+            val place = careTakingObj.getString("place")
+            val jobDetails = careTakingObj.getString("jobDetails")
+            val jobTime = careTakingObj.getString("jobTime")
+            val salary = careTakingObj.getString("salary")
+            careTakingList.add(CareTaking(id, jobTitle, place, jobDetails, jobTime, salary))
+        }
+        val intent = Intent(this, CareTakingListActivity::class.java).apply {
+            putParcelableArrayListExtra("data", careTakingList)
         }
         startActivity(intent)
     }
