@@ -53,15 +53,13 @@
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".HealthStatistics" />
-        <activity android:name=".Profile" />
-            android:screenOrientation="portrait"
-            android:exported="true">
-        </activity>
+
+
         <activity android:name=".PatientProfileDetails"
             android:screenOrientation="portrait"
             android:label="Patient Profile Details"
             android:exported="false" />
-        <activity android:name=".HealthStatistics"></activity>
+
         <activity android:name=".Profile"
             android:screenOrientation="portrait"
             android:label="Patients List"
