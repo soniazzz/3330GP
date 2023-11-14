@@ -11,6 +11,15 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import hku.hk.cs.a3330gp.ar.AttendanceActivity
 import hku.hk.cs.a3330gp.map.NavigationActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONArray
+import org.json.JSONObject
+import android.util.Log
+import com.android.volley.toolbox.JsonArrayRequest
+import hku.hk.cs.a3330gp.data.Patient
 
 class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     private lateinit var btnAR: Button
@@ -34,11 +43,12 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         btnTheme.setOnClickListener { switchTheme() }
         val health =  findViewById<Button>(R.id.health)
         val profile =  findViewById<Button>(R.id.profile)
-        health.setOnClickListener{
-            startActivity(Intent(this, HealthStatistics::class.java))
+        profile.setOnClickListener{
+            val uid:String = "123"
+            sendMessage(uid)
         }
 
-        profile.setOnClickListener{
+        health.setOnClickListener{
             startActivity(Intent(this, Profile::class.java))
         }
 
@@ -90,5 +100,39 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
 
     override fun onNavigationIconClick() {
         drawerLayout.openDrawer(navigationView)
+    }
+
+    fun sendMessage(name:String) {
+        val url = "http://10.70.21.92:5000/patients"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                renderProfiles(response)
+            },
+            Response.ErrorListener { error ->
+                Log.e("MyActivity", error.toString())
+            }
+        )
+        Volley.newRequestQueue(this).add(jsonArrayRequest)
+    }
+
+    fun renderProfiles(jsonArray: JSONArray){
+        val patientsList = arrayListOf<Patient>()
+        for (i in 0 until jsonArray.length()){
+            val patientObj = jsonArray.getJSONObject(i)
+            val id = patientObj.getString("id")
+            val name = patientObj.getString("name")
+            val sex = patientObj.getString("sex")
+            val age = patientObj.getInt("age")
+            val address = patientObj.getString("address")
+            val tel = patientObj.getString("tel")
+            val emergency_contact = patientObj.getString("emergency_contact")
+            val emergency_number = patientObj.getString("emergency_number")
+            patientsList.add(Patient(id, name, sex, age, address, tel, emergency_contact, emergency_number))
+        }
+        val intent = Intent(this, Profile::class.java).apply {
+            putParcelableArrayListExtra("data", patientsList)
+        }
+        startActivity(intent)
     }
 }
