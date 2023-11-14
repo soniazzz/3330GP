@@ -23,7 +23,7 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="?attr/colorPrimaryDark"
             android:textSize="22sp"
             android:textStyle="bold|italic" />
 
@@ -31,14 +31,14 @@
             android:id="@+id/sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/salmon"
+            android:textColor="?attr/colorPrimary"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/salmon"
+            android:textColor="?attr/colorPrimary"
             android:textSize="16sp" />
 
     </LinearLayout>

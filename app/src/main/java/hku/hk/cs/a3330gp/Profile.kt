@@ -3,9 +3,11 @@ package hku.hk.cs.a3330gp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -21,6 +23,9 @@ class Profile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val patientsList: ArrayList<Patient> = intent.getParcelableArrayListExtra<Patient>("data") ?: arrayListOf()
 
@@ -31,6 +36,16 @@ class Profile : AppCompatActivity() {
             val patient = patientsList[position]
             // Handle list item click
             startActivity(Intent(this, Profile::class.java))
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

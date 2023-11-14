@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorOnPrimary"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_alignParentStart="true"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimaryDark"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Gender:"/>
+            <TextView
+                android:id="@+id/sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Age:"/>
+            <TextView
+                android:id="@+id/age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Home Address:"/>
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Tel:"/>
+            <TextView
+                android:id="@+id/tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Emergency Contact Person:"/>
+            <TextView
+                android:id="@+id/emergency_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:text="Emergency Contact Number:"/>
+            <TextView
+                android:id="@+id/emergency_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp" />
+            <Button
+                android:id="@+id/call_patient_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Call Patient" />
+
+            <Button
+                android:id="@+id/call_emergency_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Call Emergency Number" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
