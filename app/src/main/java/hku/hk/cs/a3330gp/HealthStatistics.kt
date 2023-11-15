@@ -1,10 +1,12 @@
 package hku.hk.cs.a3330gp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -65,6 +67,13 @@ class HealthStatistics:  AppCompatActivity() {
             holder.name.text = myDataset[position].name
             holder.gender.text = myDataset[position].gender
             holder.age.text = myDataset[position].age.toString()
+
+            val moreInfoButton: Button = holder.itemView.findViewById(R.id.more_info)
+            moreInfoButton.setOnClickListener {
+                val intent = Intent(holder.itemView.context, HealthStatisticsDetailActivity::class.java)
+                intent.putExtra("patientData", myDataset[position])
+                holder.itemView.context.startActivity(intent)
+            }
         }
 
         override fun getItemCount() = myDataset.size
