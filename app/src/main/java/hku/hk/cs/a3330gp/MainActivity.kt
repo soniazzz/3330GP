@@ -19,6 +19,8 @@ import android.util.Log
 import com.android.volley.toolbox.JsonArrayRequest
 import hku.hk.cs.a3330gp.data.CareTaking
 import hku.hk.cs.a3330gp.data.Patient
+import hku.hk.cs.a3330gp.data.PatientHealthStatistics
+
 
 class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     private lateinit var btnAR: Button
@@ -61,7 +63,8 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         }
 
         health.setOnClickListener{
-            startActivity(Intent(this, Profile::class.java))
+            val uid:String = "123"
+            getHealthStatistics(uid)
         }
 
         navigationView.menu.findItem(R.id.nav_home).isChecked = true
@@ -120,6 +123,34 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     override fun onNavigationIconClick() {
         drawerLayout.openDrawer(navigationView)
     }
+
+    private fun getHealthStatistics(name: String) {
+        val url = "http://10.70.21.92:5000/health_statistics"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                renderHealthStatistics(response)
+            },
+            Response.ErrorListener { error ->
+                Log.e("MainActivity", error.toString())
+            }
+        )
+        Volley.newRequestQueue(this).add(jsonArrayRequest)
+    }
+
+    private fun renderHealthStatistics(jsonArray: JSONArray) {
+        val patientsList = arrayListOf<PatientHealthStatistics>()
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            val patient = PatientHealthStatistics.fromJson(jsonObject) // assuming PatientHealthStatistics.fromJson() exists
+            patientsList.add(patient)
+        }
+        val intent = Intent(this, HealthStatistics::class.java).apply {
+            putParcelableArrayListExtra("data", patientsList)
+        }
+        startActivity(intent)
+    }
+
 
     fun sendMessage(name:String) {
         val url = "http://10.70.21.92:5000/patients"

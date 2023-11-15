@@ -2,4 +2,5 @@
 <resources>
     <dimen name="tripProgressCard_padding">20dp</dimen>
     <dimen name="tvStatus_marginBottom">40dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
