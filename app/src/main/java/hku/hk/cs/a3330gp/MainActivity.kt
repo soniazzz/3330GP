@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var btnCareList: Button
-
+    private lateinit var userId: String
     private lateinit var options:ActivityOptions
 
     private var transition = Constants.TRANSITION_MORPH
@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        userId = "1"
+//        userId = intent.extras?.getString("id").toString()
+
         btnAR = findViewById(R.id.btnAR)
         btnCalendar = findViewById(R.id.calendar)
         btnMap = findViewById(R.id.btnMap)
@@ -64,11 +68,9 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         }
         btnCareList.setOnClickListener{
             startShowList()
-//            supportFragmentManager.beginTransaction()
-//            .replace(R.id.constraintlayout1, CareTakingFragment(), "Caretaking").addToBackStack(null)
-//            .commit()
-
-//            startActivity(Intent( ))
+        }
+        btnCalendar.setOnClickListener{
+            startCalendar()
         }
 
         val health =  findViewById<Button>(R.id.health)
@@ -106,7 +108,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
                 R.id.nav_ar -> startAr()
                 R.id.nav_history -> Toast.makeText(this, "You got me!", Toast.LENGTH_SHORT).show()
                 R.id.btnTheme -> switchTheme()
-
+                R.id.btnCareTakingVideo -> startCareTakingVideo()
 
             }
             true
@@ -116,10 +118,12 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
             .replace(R.id.appBarFragment, TopAppBarFragment(), "AppBar")
             .commit()
 
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.constraintlayout1, HomeFragment(), "Main")
-//            .commit()
     }
+
+    private fun startCareTakingVideo() {
+        startActivity(Intent(this, CareTakingVideosActivity::class.java))
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -235,14 +239,53 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
             val careTakingObj = jsonArray.getJSONObject(i)
             val id = careTakingObj.getString("id")
             val jobTitle = careTakingObj.getString("jobTitle")
+            val uuid = careTakingObj.getString("userId")
             val place = careTakingObj.getString("place")
             val jobDetails = careTakingObj.getString("jobDetails")
             val jobTime = careTakingObj.getString("jobTime")
             val salary = careTakingObj.getString("salary")
-            careTakingList.add(CareTaking(id, jobTitle, place, jobDetails, jobTime, salary))
+            careTakingList.add(CareTaking(id, uuid, jobTitle, place, jobDetails, jobTime, salary))
         }
         val intent = Intent(this, CareTakingListActivity::class.java).apply {
             putParcelableArrayListExtra("data", careTakingList)
+            putExtra("id", userId)
+        }
+        startActivity(intent)
+    }
+
+    private fun startCalendar() {
+        val url = "http://147.8.121.248:5000/users?userId=$userId"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                renderCalendar(response)
+            },
+            Response.ErrorListener { error ->
+                Log.e("CalendarActivity", error.toString())
+            }
+        )
+        Volley.newRequestQueue(this).add(jsonArrayRequest)
+
+
+    }
+
+    private fun renderCalendar(jsonArray: JSONArray) {
+
+        val careTakingList = arrayListOf<CareTaking>()
+        for (i in 0 until jsonArray.length()){
+            val careTakingObj = jsonArray.getJSONObject(i)
+            val id = careTakingObj.getString("id")
+            val jobTitle = careTakingObj.getString("jobTitle")
+            val uuid = careTakingObj.getString("userId")
+            val place = careTakingObj.getString("place")
+            val jobDetails = careTakingObj.getString("jobDetails")
+            val jobTime = careTakingObj.getString("jobTime")
+            val salary = careTakingObj.getString("salary")
+            careTakingList.add(CareTaking(id, uuid, jobTitle, place, jobDetails, jobTime, salary))
+        }
+        val intent = Intent(this, GoogleCalendarView::class.java).apply {
+            putParcelableArrayListExtra("data", careTakingList)
+            putExtra("id", userId)
         }
         startActivity(intent)
     }

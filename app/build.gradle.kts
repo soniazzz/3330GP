@@ -71,4 +71,7 @@ dependencies {
     // Mapbox Navigation SDK
     implementation ("com.mapbox.navigation:android:2.17.3")
     implementation ("com.mapbox.navigation:ui-dropin:2.17.3")
+
+    implementation ("com.kizitonwose.calendar:view:2.4.0")
+    implementation ("com.applandeo:material-calendar-view:1.7.0")
 }

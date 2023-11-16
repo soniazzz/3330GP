@@ -20,6 +20,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -33,7 +35,19 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".CareTakingVideosActivity"
+            android:exported="false" />
+        <activity
             android:name=".history.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GoogleCalendarView"
+            android:exported="false" />
+        <activity
+            android:name=".anotherCalendarView"
+            android:exported="false" />
+        <activity
+            android:name=".CalendarActivity"
             android:exported="false" />
         <activity
             android:name=".HealthStatisticsDetailActivity"
@@ -67,8 +81,7 @@
         <activity
             android:name=".PatientProfileDetails"
             android:exported="false"
-            android:label="Patient Profile Details"
-            android:screenOrientation="portrait" />
+            android:label="Patient Profile Details" />
         <activity
             android:name=".Profile"
             android:exported="false"

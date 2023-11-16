@@ -92,7 +92,7 @@
             android:layout_height="130dp"
 
 
-            android:drawableTop="@drawable/map_button"
+            android:drawableTop="@drawable/caretaking_button"
             android:text="Caretaking List"
 
             app:layout_constraintBottom_toBottomOf="parent"

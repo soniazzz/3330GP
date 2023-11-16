@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CareTaking(
     val id: String,
+    val userId: String,
     val jobTitle: String,
     val place: String,
     val jobDetails: String,

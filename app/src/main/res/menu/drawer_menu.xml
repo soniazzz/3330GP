@@ -34,7 +34,10 @@
                 android:checkable="true"/>
         </menu>
     </item>
-
+    <item
+        android:id="@+id/btnCareTakingVideo"
+        android:title="Care Taking Videos">
+    </item>
     <item
         android:id="@+id/btnTheme"
         android:title="Theme Switch">
