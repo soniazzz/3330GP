@@ -1,35 +1,42 @@
 package hku.hk.cs.a3330gp
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import hku.hk.cs.a3330gp.ar.AttendanceActivity
-import hku.hk.cs.a3330gp.map.NavigationActivity
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.Volley
-import org.json.JSONArray
-import android.util.Log
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialFadeThrough
+import hku.hk.cs.a3330gp.ar.AttendanceActivity
 import hku.hk.cs.a3330gp.data.CareTaking
 import hku.hk.cs.a3330gp.data.Patient
 import hku.hk.cs.a3330gp.data.PatientHealthStatistics
+import hku.hk.cs.a3330gp.map.NavigationActivity
+import hku.hk.cs.a3330gp.util.Constants
+import org.json.JSONArray
 
 
 class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     private lateinit var btnAR: Button
     private lateinit var btnMap: Button
     private lateinit var btnCalendar: Button
-    private lateinit var btnTheme: Button
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var btnCareList: Button
+
+    private lateinit var options:ActivityOptions
+
+    private var transition = Constants.TRANSITION_MORPH
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +48,20 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         navigationView = findViewById(R.id.navigationView)
         btnCareList = findViewById(R.id.jobs)
 
-
-
         btnAR.setOnClickListener { startAr() }
-        btnMap.setOnClickListener { startMap() }
-//        btnTheme.setOnClickListener { switchTheme() }
+        btnMap.apply {
+            this.transitionName = "shared_map"
+            this.setOnClickListener{
+                options = ActivityOptions.makeSceneTransitionAnimation(
+                    this@MainActivity,
+                    this@apply,
+                    "shared_map"
+                )
+                setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+                transition = Constants.TRANSITION_MORPH
+                startMap()
+            }
+        }
         btnCareList.setOnClickListener{
             startShowList()
 //            supportFragmentManager.beginTransaction()
@@ -71,13 +87,22 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
             // Handle menu item selected
+            transition = Constants.TRANSITION_FADE
+            val exit = MaterialFadeThrough().apply {
+                addTarget(R.id.constraintlayout1)
+            }
+            window.exitTransition = exit
+            options = ActivityOptions.makeSceneTransitionAnimation(this)
             drawerLayout.close()
             if (menuItem.itemId != R.id.nav_home) {
                 navigationView.menu.findItem(R.id.nav_home).isChecked = false
             }
 
             when (menuItem.itemId) {
-                R.id.nav_navigation -> startMap()
+                R.id.nav_navigation -> {
+                    menuItem.actionView?.transitionName = "shared_map"
+                    startMap()
+                }
                 R.id.nav_ar -> startAr()
                 R.id.nav_history -> Toast.makeText(this, "You got me!", Toast.LENGTH_SHORT).show()
                 R.id.btnTheme -> switchTheme()
@@ -110,7 +135,8 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     }
     private fun startMap() {
         val intent = Intent(this, NavigationActivity::class.java)
-        startActivity(intent)
+        intent.putExtra(Constants.TRANSITION, transition)
+        startActivity(intent, options.toBundle())
     }
     private fun switchTheme() {
         val currentNightMode = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

@@ -9,15 +9,22 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.marginBottom
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDragHandleView
+import com.google.android.material.transition.platform.MaterialContainerTransform
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialFadeThrough
 import com.mapbox.api.directions.v5.models.Bearing
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
@@ -75,9 +82,11 @@ import com.mapbox.navigation.ui.tripprogress.model.TripProgressUpdateFormatter
 import com.mapbox.navigation.ui.tripprogress.view.MapboxTripProgressView
 import hku.hk.cs.a3330gp.R
 import hku.hk.cs.a3330gp.ar.AttendanceActivity
+import hku.hk.cs.a3330gp.util.Constants
+import kotlinx.coroutines.launch
 import java.util.Date
 
-class NavigationActivity : AppCompatActivity() {
+class NavigationActivity : AppCompatActivity(), MapDialogFragment.MapDialogListener {
 
     private companion object {
         private const val BUTTON_ANIMATION_DURATION = 1500L
@@ -111,6 +120,7 @@ class NavigationActivity : AppCompatActivity() {
     private lateinit var sheetHandle: BottomSheetDragHandleView
     private lateinit var tvStatus:TextView
     private lateinit var btnAttendance:Button
+    private lateinit var loadingView:FrameLayout
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
@@ -184,9 +194,18 @@ class NavigationActivity : AppCompatActivity() {
         onInitialize = this::initNavigation
     )
 
+    private var isLoading = false
+        set(value) {
+            field = value
+            loadingView.isGone = !value
+        }
+
+    private var selectedPatient = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
+
 
         mapView = findViewById(R.id.mapView)
         maneuverView = findViewById(R.id.maneuverView)
@@ -198,9 +217,13 @@ class NavigationActivity : AppCompatActivity() {
         sheetHandle = findViewById(R.id.sheetHandle)
         tvStatus = findViewById(R.id.tvStatus)
         btnAttendance = findViewById(R.id.btnAttendance)
+        loadingView = findViewById(R.id.loadingView)
 
         bottomSheetBehavior = BottomSheetBehavior.from(tripProgressCard)
 
+        setupAnimation()
+        isLoading = true
+        loadingView.bringToFront()
         // Navigation Camera
         viewportDataSource = MapboxNavigationViewportDataSource(mapView.getMapboxMap())
         navigationCamera = NavigationCamera(
@@ -273,14 +296,23 @@ class NavigationActivity : AppCompatActivity() {
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
         // load map style
-        mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
-            // add long click listener that search for a route to the clicked destination
-            mapView.gestures.addOnMapLongClickListener { point ->
-                setupBottomSheetPeekHeight()
-                // TODO: Remove Mapbox Replayer when done
-                findRoute(point)
-                true
+        lifecycleScope.launch {
+            val mapStyle = when (this@NavigationActivity.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_NO -> NavigationStyles.NAVIGATION_DAY_STYLE
+                Configuration.UI_MODE_NIGHT_YES -> NavigationStyles.NAVIGATION_NIGHT_STYLE
+                else -> NavigationStyles.NAVIGATION_DAY_STYLE
             }
+            mapView.getMapboxMap().loadStyleUri(mapStyle) {
+                // add long click listener that search for a route to the clicked destination
+                mapView.gestures.addOnMapLongClickListener { point ->
+                    setupBottomSheetPeekHeight()
+                    // TODO: Remove Mapbox Replayer when done
+                    findRoute(point)
+                    true
+                }
+                isLoading = false
+            }
+
         }
 
         // initialize view interactions
@@ -296,7 +328,7 @@ class NavigationActivity : AppCompatActivity() {
             recenter.showTextAndExtend(BUTTON_ANIMATION_DURATION)
         }
         btnAttendance.setOnClickListener {
-            onAttendanceClick()
+            selectPatient()
         }
 
         tripProgressCard.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -396,19 +428,9 @@ class NavigationActivity : AppCompatActivity() {
             // update status text
             val desiredText: String
             if (tripProgressApi.getTripProgress(routeProgress).distanceRemaining <= 101) {
-                desiredText = getString(R.string.tvStatus_text_in_range)
-                btnAttendance.text = getString(R.string.btnAttendance_text_in_range)
-                btnAttendance.alpha = 1f
-                btnAttendance.isEnabled = true
+                updateInRange()
             } else {
-                desiredText = getString(R.string.tvStatus_text_out_of_range)
-                btnAttendance.text = getString(R.string.btnAttendance_text_out_of_range)
-                btnAttendance.alpha = 0.5f
-                btnAttendance.isEnabled = false
-            }
-
-            if (tvStatus.text != desiredText) {
-                tvStatus.text = desiredText
+                updateOutRange()
             }
             setupBottomSheetPeekHeight()
         }
@@ -499,7 +521,7 @@ class NavigationActivity : AppCompatActivity() {
             listOf(
                 ReplayRouteMapper.mapToUpdateLocation(
                     Date().time.toDouble(),
-                    Point.fromLngLat(114.136680, 22.283684)
+                    Point.fromLngLat(114.136598, 22.283709)
                 )
             )
         )
@@ -578,12 +600,74 @@ class NavigationActivity : AppCompatActivity() {
         // hide UI elements
         maneuverView.visibility = View.INVISIBLE
         routeOverview.visibility = View.INVISIBLE
-        tripProgressCard.visibility = View.INVISIBLE
+        updatePatientSelect()
+    }
+
+    private fun selectPatient() {
+        MapDialogFragment().show(supportFragmentManager, "MAP_DIALOG")
     }
 
     private fun onAttendanceClick() {
         val intent = Intent(this, AttendanceActivity::class.java)
         startActivity(intent)
 //        finish()
+    }
+
+    private fun setupAnimation() {
+        // Animations
+        when(intent.getStringExtra(Constants.TRANSITION)) {
+            Constants.TRANSITION_MORPH -> {
+                tripProgressCard.transitionName = "shared_map"
+                setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+                window.sharedElementEnterTransition = MaterialContainerTransform().apply {
+                    addTarget(R.id.tripProgressCard)
+                    duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+                }
+                window.sharedElementReturnTransition = MaterialContainerTransform().apply {
+                    addTarget(R.id.tripProgressCard)
+                    duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+                }
+            }
+            else -> {
+                val enter = MaterialFadeThrough().apply {
+                    addTarget(android.R.id.content)
+                }
+                window.enterTransition = enter
+                window.allowEnterTransitionOverlap = true
+            }
+        }
+    }
+
+    private fun updatePatientSelect() {
+        tvStatus.text = getString(R.string.btnAttendance_select_patient)
+        btnAttendance.text = getString(R.string.btnAttendance_select_patient)
+        btnAttendance.isEnabled = true
+        btnAttendance.setOnClickListener { selectPatient() }
+    }
+    private fun updateOutRange() {
+        tvStatus.text = getString(
+            R.string.tvStatus_text_out_of_range,
+            Constants.getUsers()[selectedPatient].name
+        )
+        btnAttendance.isEnabled = false
+        btnAttendance.text = resources.getString(R.string.btnAttendance_text_out_of_range)
+    }
+    private fun updateInRange() {
+        tvStatus.text = getString(R.string.tvStatus_text_in_range)
+        btnAttendance.text = getString(R.string.btnAttendance_text_in_range)
+        btnAttendance.isEnabled = true
+        btnAttendance.setOnClickListener { onAttendanceClick() }
+    }
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        findRoute(Constants.getUsers()[selectedPatient].location)
+        updateOutRange()
+    }
+
+    override fun onDialogNeutralClick(dialog: DialogFragment) {
+        dialog.dismiss()
+    }
+
+    override fun onChooseItem(dialog: DialogFragment, choice: Int) {
+        selectedPatient = choice
     }
 }
