@@ -61,7 +61,7 @@ dependencies {
 
     implementation ("com.google.ar:core:1.40.0")
 
-    implementation ("io.github.sceneview:arsceneview:1.2.2")
+    implementation ("io.github.sceneview:arsceneview:1.2.3")
 
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation ("com.google.android.gms:play-services-auth:20.7.0")

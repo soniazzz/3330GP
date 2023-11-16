@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">CareTaker</string>
-    <string name="tvStatus_text_idle">Demo: Pin a location</string>
-    <string name="tvStatus_text_out_of_range">Get within 100m of William\'s Residence</string>
+    <string name="tvStatus_text_idle">Choose a Patient as destination</string>
     <string name="tvStatus_text_in_range">Attendance taking available!</string>
+    <string name="tvStatus_text_out_of_range">Get within 100m of %1$s\'s Residence</string>
     <string name="btnAttendance_text_out_of_range">Not in range for attendance</string>
     <string name="btnAttendance_text_in_range">Take Attendance</string>
     <string name="content_description_one">Home</string>
@@ -62,4 +62,8 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="mapDialogTitle">Select a Patient:</string>
+    <string name="mapDialogCancel">Cancel</string>
+    <string name="mapDialogSelect">Select</string>
+    <string name="btnAttendance_select_patient">Select Patient</string>
 </resources>
