@@ -38,20 +38,17 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.update_weight).setOnClickListener {
-//            updateWeight(patient?.id ?: "")
-            updateWeight("123")
+            updateWeight(patient?.id ?: "1")
         }
         findViewById<Button>(R.id.update_pulse_rate).setOnClickListener {
-//            updateWeight(patient?.id ?: "")
-            updatePulseRate("123")
+
+            updatePulseRate(patient?.id ?: "1")
         }
         findViewById<Button>(R.id.update_blood_oxygen).setOnClickListener {
-//            updateWeight(patient?.id ?: "")
-            updateBloodOxygen("123")
+            updateBloodOxygen(patient?.id ?: "1")
         }
         findViewById<Button>(R.id.update_blood_pressure).setOnClickListener {
-//            updateWeight(patient?.id ?: "")
-            updateBloodPressure("123")
+            updateBloodPressure(patient?.id ?: "1")
         }
 
     }
@@ -61,7 +58,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
     private fun updateWeight(patientId: String) {
         // Replace this URL with your actual endpoint
-        val url = "http://10.70.21.92:5000/health_statistics2"
+        val url = "http://10.70.21.92:5000/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -80,7 +77,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
     private fun updatePulseRate(patientId: String) {
         // Replace this URL with your actual endpoint
-        val url = "http://10.70.21.92:5000/health_statistics2"
+        val url = "http://10.70.21.92:5000/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -98,7 +95,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
     private fun updateBloodOxygen(patientId: String) {
         // Replace this URL with your actual endpoint
-        val url = "http://10.70.21.92:5000/health_statistics2"
+        val url = "http://10.70.21.92:5000/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -116,7 +113,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
     private fun updateBloodPressure(patientId: String) {
         // Replace this URL with your actual endpoint
-        val url = "http://10.70.21.92:5000/health_statistics2"
+        val url = "http://10.70.21.92:5000/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,

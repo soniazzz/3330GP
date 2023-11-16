@@ -58,12 +58,12 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         val health =  findViewById<Button>(R.id.health)
         val profile =  findViewById<Button>(R.id.profile)
         profile.setOnClickListener{
-            val uid:String = "123"
+            val uid:String = "1"
             sendMessage(uid)
         }
 
         health.setOnClickListener{
-            val uid:String = "123"
+            val uid:String = "1"
             getHealthStatistics(uid)
         }
 
@@ -124,14 +124,14 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         drawerLayout.openDrawer(navigationView)
     }
 
-    private fun getHealthStatistics(name: String) {
-        val url = "http://10.70.21.92:5000/health_statistics"
+    private fun getHealthStatistics(carer_id: String) {
+        val url = "http://10.70.21.92:5000/health_statistics?carer_id=$carer_id"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
-            Response.Listener<JSONArray> { response ->
+            { response ->
                 renderHealthStatistics(response)
             },
-            Response.ErrorListener { error ->
+            { error ->
                 Log.e("MainActivity", error.toString())
             }
         )
@@ -152,14 +152,14 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     }
 
 
-    fun sendMessage(name:String) {
-        val url = "http://10.70.21.92:5000/patients"
+    fun sendMessage(carer_id:String) {
+        val url = "http://10.70.21.92:5000/patients?carer_id=$carer_id"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
-            Response.Listener<JSONArray> { response ->
+            { response ->
                 renderProfiles(response)
             },
-            Response.ErrorListener { error ->
+            { error ->
                 Log.e("MyActivity", error.toString())
             }
         )
