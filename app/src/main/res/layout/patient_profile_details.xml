@@ -28,13 +28,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/avatar"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_alignParentStart="true"
-                android:src="@android:drawable/ic_menu_gallery" />
-
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
@@ -132,6 +125,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Call Emergency Number" />
+            <Button
+                android:id="@+id/sms_patient_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send SMS to Patient" />
+
+            <Button
+                android:id="@+id/sms_emergency_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send SMS to Emergency Contact" />
 
         </LinearLayout>
 

@@ -28,6 +28,17 @@ class PatientProfileDetails : AppCompatActivity() {
         val callPatientButton = findViewById<Button>(R.id.call_patient_button)
         val callEmergencyButton = findViewById<Button>(R.id.call_emergency_button)
 
+        val smsPatientButton = findViewById<Button>(R.id.sms_patient_button)
+        val smsEmergencyButton = findViewById<Button>(R.id.sms_emergency_button)
+
+        smsPatientButton.setOnClickListener {
+            startSms("your", patient?.tel)
+        }
+        smsEmergencyButton.setOnClickListener {
+            val name=patient?.name+"'s"
+            startSms(name, patient?.emergency_number)
+        }
+
 
 
         findViewById<TextView>(R.id.name).text = patient?.name
@@ -63,6 +74,14 @@ class PatientProfileDetails : AppCompatActivity() {
             data = Uri.parse("tel:$number")
         }
         startActivity(callIntent)
+    }
+
+    private fun startSms(name:String, number: String?) {
+        val smsIntent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("sms:$number")
+            putExtra("sms_body", "Hello, I am $name carer. I am contacting your for") // preset message
+        }
+        startActivity(smsIntent)
     }
 
 
