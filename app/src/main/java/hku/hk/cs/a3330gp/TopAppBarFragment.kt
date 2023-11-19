@@ -1,15 +1,19 @@
 package hku.hk.cs.a3330gp
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
+import hku.hk.cs.a3330gp.util.Constants
 
 class TopAppBarFragment : Fragment(R.layout.fragment_top_app_bar) {
     private lateinit var topAppBar:MaterialToolbar
     private var topAppBarListener: TopAppBarListener? = null
+    private lateinit var options:ActivityOptions
+    private var transition = Constants.TRANSITION_FADE
 
     interface TopAppBarListener {
         fun onNavigationIconClick()

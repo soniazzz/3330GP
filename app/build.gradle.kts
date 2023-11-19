@@ -22,8 +22,13 @@ android {
         if (googleApiKey == "" || mapboxPublicKey == "" || mapboxPrivateKey == "") {
             throw GradleException("GOOGLE_MAPS_API_KEY or MAPBOX_DOWNLOADS_TOKEN or MAPBOX_DOWNLOADS_TOKEN isn't set. Set it in gradle.properties.")
         }
+        val serverIp = project.findProperty("SERVER_IP") ?: ""
+        if (serverIp == "") {
+            throw GradleException("SERVER_IP isn't set. Set it in gradle.properties.")
+        }
         resValue( "string", "google_maps_key", googleApiKey as String)
         resValue( "string", "mapbox_access_token", mapboxPublicKey as String)
+        resValue( "string", "server_ip", serverIp as String)
     }
 
     buildTypes {
@@ -51,7 +56,7 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.12.0-alpha01")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
