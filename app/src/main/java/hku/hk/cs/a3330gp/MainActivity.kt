@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         userId = "1"
 //        userId = intent.extras?.getString("id").toString()
 
@@ -109,6 +110,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
                 R.id.nav_history -> Toast.makeText(this, "You got me!", Toast.LENGTH_SHORT).show()
                 R.id.btnTheme -> switchTheme()
                 R.id.btnCareTakingVideo -> startCareTakingVideo()
+                R.id.btnBot -> startBot()
 
             }
             true
@@ -122,6 +124,10 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
 
     private fun startCareTakingVideo() {
         startActivity(Intent(this, CareTakingVideosActivity::class.java))
+    }
+
+    private fun startBot() {
+        startActivity(Intent(this, ChatBotActivity::class.java))
     }
 
 

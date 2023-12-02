@@ -74,4 +74,6 @@ dependencies {
 
     implementation ("com.kizitonwose.calendar:view:2.4.0")
 
+    implementation ("io.kommunicate.sdk:kommunicateui:2.7.2")
+
 }

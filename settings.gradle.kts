@@ -25,6 +25,7 @@ dependencyResolutionManagement {
                 }
             }
         }
+        maven { url=uri("https://kommunicate.jfrog.io/artifactory/kommunicate-android-sdk") }
     }
 }
 

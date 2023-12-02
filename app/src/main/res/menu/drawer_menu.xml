@@ -39,6 +39,10 @@
         android:title="Care Taking Videos">
     </item>
     <item
+        android:id="@+id/btnBot"
+        android:title="Carer Pro Bot">
+    </item>
+    <item
         android:id="@+id/btnTheme"
         android:title="Theme Switch">
     </item>
