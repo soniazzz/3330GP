@@ -21,8 +21,10 @@ import hku.hk.cs.a3330gp.ar.AttendanceActivity
 import hku.hk.cs.a3330gp.data.CareTaking
 import hku.hk.cs.a3330gp.data.Patient
 import hku.hk.cs.a3330gp.data.PatientHealthStatistics
+import hku.hk.cs.a3330gp.history.HistoryActivity
 import hku.hk.cs.a3330gp.map.NavigationActivity
 import hku.hk.cs.a3330gp.util.Constants
+import hku.hk.cs.a3330gp.util.NavigationUtil
 import org.json.JSONArray
 
 
@@ -41,7 +43,6 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         userId = "1"
 //        userId = intent.extras?.getString("id").toString()
@@ -115,6 +116,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
             }
             true
         }
+        NavigationUtil.setupNavigationView(navigationView, drawerLayout, this)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.appBarFragment, TopAppBarFragment(), "AppBar")
@@ -148,6 +150,10 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
         intent.putExtra(Constants.TRANSITION, transition)
         startActivity(intent, options.toBundle())
     }
+    private fun startHistory() {
+        val intent = Intent(this, HistoryActivity::class.java)
+        startActivity(intent)
+    }
     private fun switchTheme() {
         val currentNightMode = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         when (currentNightMode) {
@@ -161,7 +167,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     }
 
     private fun getHealthStatistics(carer_id: String) {
-        val url = "http://10.70.21.92:5000/health_statistics?carer_id=$carer_id"
+        val url = "${getString(R.string.server_ip)}/health_statistics?carer_id=$carer_id"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -189,7 +195,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
 
 
     fun sendMessage(carer_id:String) {
-        val url = "http://10.70.21.92:5000/patients?carer_id=$carer_id"
+        val url = "${getString(R.string.server_ip)}/patients?carer_id=$carer_id"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -226,7 +232,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
 //        supportFragmentManager.beginTransaction()
 //            .replace(R.id.constraintlayout1, HomeFragment(), "Caretaking")
 //            .commit()
-        val url = "http://147.8.121.248:5000/jobs"
+        val url = "${getString(R.string.server_ip)}/jobs"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
             Response.Listener<JSONArray> { response ->
@@ -260,7 +266,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     }
 
     private fun startCalendar() {
-        val url = "http://147.8.121.248:5000/users?userId=$userId"
+        val url = "${getString(R.string.server_ip)}/users?userId=$userId"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,
             Response.Listener<JSONArray> { response ->

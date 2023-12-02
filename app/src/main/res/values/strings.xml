@@ -66,4 +66,7 @@
     <string name="mapDialogCancel">Cancel</string>
     <string name="mapDialogSelect">Select</string>
     <string name="btnAttendance_select_patient">Select Patient</string>
+    <string name="dialog_history_saved">History Saved!</string>
+    <string name="history_title">Attendance History</string>
+    <string name="history_description">Browse all your past attendance history with information on the record\'s date and time</string>
 </resources>

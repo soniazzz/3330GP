@@ -50,7 +50,7 @@ class CareTakingAdapter(private val list: List<CareTaking>, private val userId: 
     }
 
     private fun sendRequest(holder: ViewHolder, currentItem: CareTaking) {
-//        val url = " http://147.8.121.248:5000/jobs"
+//        val url = "${getString(R.string.server_ip)}/jobs"
 //        val jsonArrayRequest = JsonArrayRequest(
 //            Request.Method.POST, url, null,
 //            Response.Listener<JSONArray> { response ->
@@ -62,7 +62,7 @@ class CareTakingAdapter(private val list: List<CareTaking>, private val userId: 
 //            }
 //        )
 //        Volley.newRequestQueue(context).add(jsonArrayRequest)
-        val url = "http://147.8.121.248:5000/jobs"
+        val url = "${context.getString(R.string.server_ip)}/jobs"
         val queue = Volley.newRequestQueue(context)
 
         val request = object : StringRequest(

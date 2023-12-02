@@ -19,7 +19,7 @@ class MapDialogFragment : DialogFragment() {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
             // Get the layout inflater.
-            val inflater = requireActivity().layoutInflater;
+            val inflater = requireActivity().layoutInflater
 
             builder.setTitle(resources.getString(R.string.mapDialogTitle))
                 .setNeutralButton(resources.getString(R.string.mapDialogCancel)) { dialog, which ->

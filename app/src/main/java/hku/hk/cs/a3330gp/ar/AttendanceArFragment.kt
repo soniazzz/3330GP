@@ -11,12 +11,11 @@ import com.google.ar.core.Anchor
 import com.google.ar.core.Config
 import com.google.ar.core.Plane
 import hku.hk.cs.a3330gp.R
-import hku.hk.cs.a3330gp.util.Constants
 import io.github.sceneview.ar.ARSceneView
 import io.github.sceneview.ar.arcore.getUpdatedPlanes
 import io.github.sceneview.ar.node.AnchorNode
-import io.github.sceneview.ar.node.AugmentedImageNode
 import io.github.sceneview.math.Position
+import io.github.sceneview.math.Rotation
 import io.github.sceneview.node.ModelNode
 import kotlinx.coroutines.launch
 
@@ -25,7 +24,6 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
     private lateinit var sceneView:ARSceneView
     private lateinit var loadingView:FrameLayout
 
-    private val augmentedImageNodes = mutableListOf<AugmentedImageNode>()
     private var anchorNode: AnchorNode? = null
         set(value) {
             if (field != value) {
@@ -35,7 +33,6 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
 
     private var modelNode: ModelNode? = null
 
-    private val userList = Constants.getUsers()
 
     private var isLoading = false
         set(value) {
@@ -43,8 +40,9 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
             loadingView.isGone = !value
         }
 
-    private var arListener: ARListener? = null
-    interface ARListener {
+    private var arInterface: ARInterface? = null
+    interface ARInterface {
+        fun onSceneViewInstanceReady(arSceneView: ARSceneView)
         fun onModelClick()
     }
 
@@ -75,12 +73,13 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
                 }
             }
         }
+        arInterface?.onSceneViewInstanceReady(sceneView)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is ARListener) {
-            arListener = context
+        if (context is ARInterface) {
+            arInterface = context
         } else {
             throw RuntimeException("$context must implement ARListener")
         }
@@ -88,7 +87,7 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
 
     override fun onDetach() {
         super.onDetach()
-        arListener = null
+        arInterface = null
     }
 
     private fun addAnchorNode(anchor: Anchor) {
@@ -99,10 +98,9 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
                     isEditable = true
                     lifecycleScope.launch {
                         sceneView.modelLoader.createModelInstance(
-                            "models/Error.glb"
+                            "models/shiba.glb"
                         ).let { modelInstance ->
-                            modelNode = RotatingNode(
-                                degreesPerSecond = 20f,
+                            modelNode = ModelNode(
                                 modelInstance = modelInstance,
                                 // Scale to fit in a 0.5 meters cube
                                 scaleToUnits = 0.5f,
@@ -110,12 +108,13 @@ class AttendanceArFragment : Fragment(R.layout.fragment_attendance_ar) {
                                 centerOrigin = Position(y = -0.5f)
                             ).apply {
                                 isEditable = true
-                                isScaleEditable = false
-                                startAnimation()
+                                rotation = Rotation(x = 270.0f, y = 0.0f, z = 0.0f)
                             }
                             addChildNode(modelNode!!)
                             modelNode?.onSingleTapConfirmed = {
-                                arListener?.onModelClick()
+                                isLoading = true
+                                arInterface?.onModelClick()
+                                isLoading = false
                                 true
                             }
                         }
