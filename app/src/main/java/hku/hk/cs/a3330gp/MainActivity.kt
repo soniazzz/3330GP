@@ -229,9 +229,7 @@ class MainActivity : AppCompatActivity(), TopAppBarFragment.TopAppBarListener {
     }
 
     private fun startShowList() {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.constraintlayout1, HomeFragment(), "Caretaking")
-//            .commit()
+
         val url = "${getString(R.string.server_ip)}/jobs"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET, url, null,

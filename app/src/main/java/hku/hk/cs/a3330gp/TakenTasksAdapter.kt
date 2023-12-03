@@ -41,8 +41,7 @@ class TakenTasksAdapter(private val list: List<CareTaking>, private val userId: 
         holder.place.text = currentItem.place
         holder.jobDetails.text = currentItem.jobDetails
         holder.jobTime.text = currentItem.jobTime
-//        holder.addCalendarButton.text =
-        // Set an OnClickListener for your button if needed
+
         holder.addCalendarButton.setOnClickListener {
             // Handle button click here
             sendRequest(holder, currentItem, context)

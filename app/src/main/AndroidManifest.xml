@@ -48,12 +48,8 @@
         <activity
             android:name=".GoogleCalendarView"
             android:exported="false" />
-        <activity
-            android:name=".anotherCalendarView"
-            android:exported="false" />
-        <activity
-            android:name=".CalendarActivity"
-            android:exported="false" />
+
+
         <activity
             android:name=".HealthStatisticsDetailActivity"
             android:exported="false"

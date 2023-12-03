@@ -55,7 +55,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
 
     private fun updateWeight(patientId: String) {
-        // Replace this URL with your actual endpoint
+
         val url = "${getString(R.string.server_ip)}/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -74,7 +74,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
 
 
     private fun updatePulseRate(patientId: String) {
-        // Replace this URL with your actual endpoint
+
         val url = "${getString(R.string.server_ip)}/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -92,7 +92,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
     }
 
     private fun updateBloodOxygen(patientId: String) {
-        // Replace this URL with your actual endpoint
+
         val url = "${getString(R.string.server_ip)}/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -110,7 +110,7 @@ class HealthStatisticsDetailActivity : AppCompatActivity() {
     }
 
     private fun updateBloodPressure(patientId: String) {
-        // Replace this URL with your actual endpoint
+
         val url = "${getString(R.string.server_ip)}/update_health_statistics?patient_id=$patientId"
 
         val jsonObjectRequest = JsonObjectRequest(

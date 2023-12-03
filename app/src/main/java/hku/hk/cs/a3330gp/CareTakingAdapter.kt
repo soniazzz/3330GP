@@ -42,26 +42,15 @@ class CareTakingAdapter(private val list: List<CareTaking>, private val userId: 
         holder.jobDetails.text = currentItem.jobDetails
         holder.jobTime.text = currentItem.jobTime
         holder.acceptButton.text = if (currentItem.userId == "null") "Accept" else "Cancel"
-        // Set an OnClickListener for your button if needed
+
         holder.acceptButton.setOnClickListener {
-            // Handle button click here
+
             sendRequest(holder, currentItem)
         }
     }
 
     private fun sendRequest(holder: ViewHolder, currentItem: CareTaking) {
-//        val url = "${getString(R.string.server_ip)}/jobs"
-//        val jsonArrayRequest = JsonArrayRequest(
-//            Request.Method.POST, url, null,
-//            Response.Listener<JSONArray> { response ->
-//                holder.acceptButton.text =
-//                    if (holder.acceptButton.text == "Accept") "Cancel" else "Accept"
-//            },
-//            Response.ErrorListener { error ->
-//                Log.e("CareTakingAdapter", error.toString())
-//            }
-//        )
-//        Volley.newRequestQueue(context).add(jsonArrayRequest)
+
         val url = "${context.getString(R.string.server_ip)}/jobs"
         val queue = Volley.newRequestQueue(context)
 
@@ -69,7 +58,7 @@ class CareTakingAdapter(private val list: List<CareTaking>, private val userId: 
             Method.POST,
             url,
             Response.Listener<String> { response ->
-                // handle your response
+
                 holder.acceptButton.text = if (holder.acceptButton.text == "Accept") "Cancel" else "Accept"
 
             },
@@ -81,6 +70,9 @@ class CareTakingAdapter(private val list: List<CareTaking>, private val userId: 
                 val params = HashMap<String, String>()
                 params["userId"] = userId
                 params["careTakingId"] = currentItem.id
+
+                Log.i("userid",userId)
+                Log.i("careTakingId",currentItem.id)
                 return params
             }
         }
