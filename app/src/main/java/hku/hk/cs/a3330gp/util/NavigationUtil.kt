@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialFadeThrough
 import hku.hk.cs.a3330gp.CareTakingVideosActivity
+import hku.hk.cs.a3330gp.ChatBotActivity
 import hku.hk.cs.a3330gp.MainActivity
 import hku.hk.cs.a3330gp.R
 import hku.hk.cs.a3330gp.ar.AttendanceActivity
@@ -71,9 +72,20 @@ object NavigationUtil {
                     startCareTakingVideo(activity)
                 }
             }
+            R.id.btnBot -> {
+
+                if (activity.javaClass != ChatBotActivity::class.java) {
+                    startChatBot(activity)
+                }
+            }
         }
 
         return true
+    }
+
+    private fun startChatBot(activity: AppCompatActivity) {
+        val intent = Intent(activity, ChatBotActivity::class.java)
+        activity.startActivity(intent)
     }
 
     fun startHome(activity: AppCompatActivity) {
@@ -108,4 +120,7 @@ object NavigationUtil {
     private fun startCareTakingVideo(activity: AppCompatActivity) {
         activity.startActivity(Intent(activity, CareTakingVideosActivity::class.java))
     }
+
+
+
 }
